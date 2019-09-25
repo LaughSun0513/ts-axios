@@ -42,6 +42,9 @@ router.get('/simple/get',(req,res)=>{
       msg:"Hello Typescript"
     })
 })
+router.get('/base/get', function(req, res) {
+  res.json(req.query)
+})
 app.use(router);
 const PORT = process.env.PORT || 8000;
 

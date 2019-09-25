@@ -1,8 +1,23 @@
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
+
+//遍历目录，形成多入口对象
+const reduceDir = (__dirname)=>{
+  let dirArr = fs.readdirSync(__dirname);
+  return dirArr.reduce((entries,dir)=>{
+    const fullDir = path.join(__dirname,dir);
+    const entry = path.join(fullDir,'app.ts');
+    if (fs.statSync(fullDir).isDirectory() && fs.existsSync(entry)) {
+      entries[dir] = ['webpack-hot-middleware/client', entry]
+    }
+    console.log('entries===>'+JSON.stringify(entries))
+    return entries
+  },{})
+}
 module.exports = {
   mode:"development",
-  entry:path.resolve(__dirname,'./simple/app.ts'),
+  entry:reduceDir(__dirname),
   output:{
     path:path.join(__dirname,"__build__"),//打包目录
     filename:"[name].js",
@@ -21,9 +36,7 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
-              //不加这个选项的话，它会把转义的结果写入到文件中
-              //在内存中由webpack来处理,让后续loader处理ts-loader的结果
-              transpileOnly: true
+              transpileOnly: true 
             }
           }
         ]
