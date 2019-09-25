@@ -41,7 +41,7 @@ axios({
   url: '/base/get',
   params: {
     isNull: 'isNUll',
-    isNull: null
+    isA: null
   }
 })
 
