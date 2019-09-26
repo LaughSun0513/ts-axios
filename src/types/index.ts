@@ -34,4 +34,5 @@ export interface AxiosRequestConfig {
   method?: Method //请求的 HTTP 方法
   params?: any //get、head 等类型请求的参数
   data?: any //post、patch 等类型请求的数据
+  headers?: any //请求头
 }

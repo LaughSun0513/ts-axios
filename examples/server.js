@@ -42,9 +42,12 @@ router.get('/simple/get',(req,res)=>{
       msg:"Hello Typescript"
     })
 });
+// 响应post请求
 router.post('/base/post', function(req, res) {
   res.json(req.body)
 });
+
+// 响应buffer数据流
 router.post('/base/buffer', function(req, res) {
   let msg=[];
   req.on("data",chunk=>{
@@ -55,6 +58,7 @@ router.post('/base/buffer', function(req, res) {
     res.json(buf.toJSON());
   });
 })
+
 app.use(router);
 const PORT = process.env.PORT || 8202;
 
