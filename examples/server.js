@@ -41,12 +41,22 @@ router.get('/simple/get',(req,res)=>{
       success:true,
       msg:"Hello Typescript"
     })
-})
-router.get('/base/get', function(req, res) {
-  res.json(req.query)
+});
+router.post('/base/post', function(req, res) {
+  res.json(req.body)
+});
+router.post('/base/buffer', function(req, res) {
+  let msg=[];
+  req.on("data",chunk=>{
+    msg.push(chunk);
+  });
+  req.on("end",()=>{
+    let buf = Buffer.concat(msg);
+    res.json(buf.toJSON());
+  });
 })
 app.use(router);
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8202;
 
 app.listen(PORT,()=>{
   console.log(`Server is listening on http://localhost:${PORT}`)

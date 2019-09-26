@@ -78,57 +78,7 @@ function encode(val: string): string {
     .replace(/%5D/gi, ']')
 }
 
-// 这么写代码不优雅
-/*export function bulidURL(url: string, params?: any): string {
-  if (!params) {
-    return url;
-  }
-  const keysArr = Object.keys(params);
-  const parts: string[] = [];
-  keysArr.forEach(key => {
-    let val = params[key];
-    if (val === null || val === 'undefined') {
-      return;
-    }
-    let onePart = '';
-    if (Array.isArray(val)) {
-      // val-->['bar', 'baz'] --> foo[]=bar,foo[]=baz
-      key = key + "[]";
-      val.forEach(item => {
-        onePart = `${encode(key)}=${encode(item)}` // 'foo[]=bar'
-        parts.push(onePart); // '["foo[]=bar","foo[]=baz"]'
-      });
-    }
-    else if (isObject(val)) {
-      val = JSON.stringify(val); // "{ bar: 'baz'}"
-      onePart = `${encode(key)}=${encode(val)}`
-      parts.push(onePart);
-    }
-    else if (isDate(val)) {
-      val = val.toISOString() // 2019-04-01T05:55:39.030Z
-      onePart = `${encode(key)}=${encode(val)}`
-      parts.push(onePart);
-    }
-    else {
-      onePart = `${encode(key)}=${encode(val)}`
-      parts.push(onePart);
-    }
-  });
-  let finalParmas = parts.join("&"); // "foo[]=bar&foo[]=baz"
-  if (url.indexOf("#") > 0) { // /base/get#hash --> /base/get
-    let markIndex = url.indexOf("#");
-    url = url.slice(0, markIndex) + "?" + finalParmas; // -->/base/get#hash
-  }
-  else if (url.indexOf("?") > 0) { // /base/get?foo=bar
-    url = url + "&" + finalParmas;
-  }
-  else {
-    url = url + "?"+finalParmas;
-  }
-
-  return url;
-}*/
-export function bulidURL(url: string, params?: any) {
+export function buildURL(url: string, params?: any) {
   if (!params) {
     return url
   }
@@ -169,3 +119,54 @@ export function bulidURL(url: string, params?: any) {
   }
   return url
 }
+
+// 这么写代码不优雅
+/*export function buildURL(url: string, params?: any): string {
+  if (!params) {
+    return url;
+  }
+  const keysArr = Object.keys(params);
+  const parts: string[] = [];
+  keysArr.forEach(key => {
+    let val = params[key];
+    if (val === null || val === 'undefined') {
+      return;
+    }
+    let onePart = '';
+    if (Array.isArray(val)) {
+      // val-->['bar', 'baz'] --> foo[]=bar,foo[]=baz
+      key = key + "[]";
+      val.forEach(item => {
+        onePart = `${encode(key)}=${encode(item)}` // 'foo[]=bar'
+        parts.push(onePart); // '["foo[]=bar","foo[]=baz"]'
+      });
+    }
+    else if (isObject(val)) {
+      val = JSON.stringify(val); // "{ bar: 'baz'}"
+      onePart = `${encode(key)}=${encode(val)}`
+      parts.push(onePart);
+    }
+    else if (isDate(val)) {
+      val = val.toISOString() // 2019-04-01T05:55:39.030Z
+      onePart = `${encode(key)}=${encode(val)}`
+      parts.push(onePart);
+    }
+    else {
+      onePart = `${encode(key)}=${encode(val)}`
+      parts.push(onePart);
+    }
+  });
+  let finalParams = parts.join("&"); // "foo[]=bar&foo[]=baz"
+  if (url.indexOf("#") > 0) { // /base/get#hash --> /base/get
+    let markIndex = url.indexOf("#");
+    url = url.slice(0, markIndex) + "?" + finalParams; // -->/base/get#hash
+  }
+  else if (url.indexOf("?") > 0) { // /base/get?foo=bar
+    url = url + "&" + finalParams;
+  }
+  else {
+    url = url + "?"+finalParams;
+  }
+
+  return url;
+}*/

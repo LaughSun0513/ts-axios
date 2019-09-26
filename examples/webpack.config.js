@@ -11,7 +11,9 @@ const reduceDir = (__dirname)=>{
     if (fs.statSync(fullDir).isDirectory() && fs.existsSync(entry)) {
       entries[dir] = ['webpack-hot-middleware/client', entry]
     }
-    console.log('entries===>'+JSON.stringify(entries))
+    /*{"base":["webpack-hot-middleware/client","/Users/yuxiaoyang03/Desktop/learning/ts-axios/examples/base/app.ts"],
+     "simple":["webpack-hot-middleware/client","/Users/yuxiaoyang03/Desktop/learning/ts-axios/examples/simple/app.ts"]
+    }*/
     return entries
   },{})
 }

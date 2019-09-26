@@ -59,4 +59,22 @@ axios({
   params: {
     bar: 'hasParams'
   }
+});
+
+axios({
+  method: "post",
+  url: "/base/post",
+  data: {
+    a: "data01",
+    b: "data02"
+  }
+});
+
+const arr = new Int32Array([20, 30]);
+axios({
+  method: "post",
+  url: "/base/buffer",
+  data: {
+    arr
+  }
 })
