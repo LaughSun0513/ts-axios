@@ -35,4 +35,17 @@ export interface AxiosRequestConfig {
   params?: any //get、head 等类型请求的参数
   data?: any //post、patch 等类型请求的数据
   headers?: any //请求头
+  responseType?: XMLHttpRequestResponseType // 可以指定返回时响应的数据类型 ==> "" | "arraybuffer" | "blob" | "document" | "json" | "text"
 }
+// ajax返回的数据解构
+export interface AxiosResponse {
+  status: number //HTTP状态码
+  statusText: string //状态消息
+  data: any //服务端返回的数据
+  headers: any //请求头信息
+  config: AxiosRequestConfig // 请求的参数配置
+  ajax: any //请求的XMLHttpRequest 对象实例
+}
+
+// ajax返回的数据解构 promise化
+export interface AxiosResponsePromise extends Promise<AxiosResponse> {}
