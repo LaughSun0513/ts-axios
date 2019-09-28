@@ -36,6 +36,7 @@ export interface AxiosRequestConfig {
   data?: any //post、patch 等类型请求的数据
   headers?: any //请求头
   responseType?: XMLHttpRequestResponseType // 可以指定返回时响应的数据类型 ==> "" | "arraybuffer" | "blob" | "document" | "json" | "text"
+  timeout?: number
 }
 // ajax返回的数据解构
 export interface AxiosResponse {
