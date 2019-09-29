@@ -1,43 +1,14 @@
-import { AxiosRequestConfig, AxiosResponse, AxiosResponsePromise } from './types'
-import { buildURL } from './helpers/url'
-import { isObject } from './helpers/utils'
-import { processHeaders } from './helpers/header'
-import xhr from './xhr'
+import { AxiosInstance, AxiosRequestConfig } from './types'
+import Axios from './core/Axios'
+import { extend } from './helpers/utils'
 
-// get请求 转换URL
-function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url, params)
+// 实现混合对象
+// 首先这个对象是一个函数，其次这个对象要包括 Axios 类的所有原型属性和实例属性
+function createInstance(): AxiosInstance {
+  const context = new Axios() // 实例化Axios
+  const instance = Axios.prototype.request.bind(context) // 通过bind生成一个新的函数，调用Axios类里的request方法 ,绑定上下文context
+  extend(instance, context) // 将context里的方法混合到instance这个函数对象里
+  return instance as AxiosInstance
 }
-// post请求 添加请求头
-function transformHeaders(config: AxiosRequestConfig): any {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-}
-// post请求 序列化data
-function transformRequestData(config: AxiosRequestConfig): any {
-  let { data } = config
-  if (isObject(data)) {
-    data = JSON.stringify(data)
-  }
-  return data
-}
-function processConfig(config: AxiosRequestConfig): void {
-  config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
-}
-// 把返回值data转换为JSON格式
-function transformDataToJson(res: any): any {
-  if (typeof res.data === 'string') {
-    res.data = JSON.parse(res.data)
-  }
-  return res
-}
-function axios(config: AxiosRequestConfig): AxiosResponsePromise {
-  processConfig(config)
-  return xhr(config).then(res => {
-    return (res = transformDataToJson(res))
-  })
-}
+const axios = createInstance()
 export default axios

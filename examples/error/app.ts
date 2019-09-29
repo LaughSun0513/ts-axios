@@ -46,7 +46,7 @@ axios({
     console.log(e.message)
 })
 
-
+// 外部可以使用内部的类型AxiosError，并打印出更多的错误信息
 axios({
     method: 'get',
     url: '/error/timeout',
