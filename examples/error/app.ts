@@ -1,4 +1,4 @@
-import axios from '../../src/index';
+import axios, { AxiosError } from '../../src/index'
 // 错误case1:网络错误
 // 错误case2:超时错误
 // 错误case3:非正常状态码错误
@@ -45,3 +45,17 @@ axios({
 }).catch((e) => {
     console.log(e.message)
 })
+
+
+axios({
+    method: 'get',
+    url: '/error/timeout',
+    timeout: 2000
+  }).then((res) => {
+    console.log(res)
+  }).catch((e: AxiosError) => {
+    console.log(e.message)
+    console.log(e.config)
+    console.log(e.ajax)
+    console.log(e.response)
+  })

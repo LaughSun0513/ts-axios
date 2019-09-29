@@ -1,5 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosResponsePromise } from './types'
 import { parseHeaders } from './helpers/header'
+import { createError } from './helpers/error'
 
 export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
   return new Promise((resolve, reject) => {
@@ -41,12 +42,21 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
         resolve(result)
       } else {
         // case1 非200状态码的错误
-        reject(new Error(`Request failed with status code ${ajax.status}`))
+        const response = responseType && responseType === 'text' ? ajax.responseText : ajax.response
+        reject(
+          createError(
+            `Request failed with status code ${ajax.status}`,
+            config,
+            null,
+            ajax,
+            response
+          )
+        )
       }
     }
     // case2 网络错误
     ajax.onerror = () => {
-      reject(new Error('Network Error'))
+      reject(createError('Network Error', config, null, ajax))
     }
     if (timeout) {
       // 用户手动设置timeout
@@ -54,7 +64,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
     }
     // case3 超时错误
     ajax.ontimeout = () => {
-      reject(new Error(`Timeout of ${timeout} ms exceeded`))
+      reject(createError(`Timeout of ${config.timeout} ms exceeded`, config, 'ECONNABORTED', ajax))
     }
     // 官方写法 检测是否发送请求头
     /*
