@@ -2,7 +2,17 @@ import { AxiosRequestConfig, AxiosResponsePromise, Method } from '../types'
 import dispatchRequest from './dispatchRequest'
 
 export default class Axios {
-  request(config: AxiosRequestConfig): AxiosResponsePromise {
+  request(url: any, config?: any): AxiosResponsePromise {
+    // 函数重载的使用
+    // axios(config) / axios(url,config) 使用方式可以是一个参数,也可以是两个参数
+    if (typeof url === 'string') {
+      if (!config) {
+        config = {}
+      }
+      config.url = url
+    } else {
+      config = url
+    }
     return dispatchRequest(config)
   }
   // 抽象函数 统一调request方法

@@ -31,7 +31,7 @@ export type Method =
   | 'patch'
   | 'PATCH'
 export interface AxiosRequestConfig {
-  url: string // 请求的地址
+  url?: string // 请求的地址
   method?: Method // 请求的 HTTP 方法
   params?: any // get、head 等类型请求的参数
   data?: any // post、patch 等类型请求的数据
@@ -75,4 +75,5 @@ export interface Axios {
 // 混合类型的接口 既包含Axios接口里的方法 又包含自己的方法
 export interface AxiosInstance extends Axios {
   (config: AxiosRequestConfig): AxiosResponsePromise
+  (url: string, config?: AxiosRequestConfig): AxiosResponsePromise
 }
