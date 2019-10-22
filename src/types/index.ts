@@ -40,17 +40,17 @@ export interface AxiosRequestConfig {
   timeout?: number
 }
 // ajax返回的数据解构
-export interface AxiosResponse {
+export interface AxiosResponse<T = any> {
+  data: T // 服务端返回的数据 这里不再使用any，而是用泛型来控制
   status: number // HTTP状态码
   statusText: string // 状态消息
-  data: any // 服务端返回的数据
   headers: any // 请求头信息
   config: AxiosRequestConfig // 请求的参数配置
   ajax: any // 请求的XMLHttpRequest 对象实例
 }
 
-// ajax返回的数据解构 promise化
-export interface AxiosResponsePromise extends Promise<AxiosResponse> {}
+// ajax返回的数据解构 promise化 同时接收泛型数据结构
+export interface AxiosResponsePromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 // 收集更多的错误信息进行返回，错误接口，供外部使用，继承Error
 export interface AxiosError extends Error {
@@ -63,17 +63,17 @@ export interface AxiosError extends Error {
 
 // 接口扩展
 export interface Axios {
-  request(config: AxiosRequestConfig): AxiosResponsePromise
-  get(url: string, config?: AxiosRequestConfig): AxiosResponsePromise
-  head(url: string, config?: AxiosRequestConfig): AxiosResponsePromise
-  delete(url: string, config?: AxiosRequestConfig): AxiosResponsePromise
-  options(url: string, config?: AxiosRequestConfig): AxiosResponsePromise
-  post(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise
-  put(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise
-  patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise
+  request<T = any>(config: AxiosRequestConfig): AxiosResponsePromise<T>
+  get<T = any>(url: string, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+  head<T = any>(url: string, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+  delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+  options<T = any>(url: string, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+  patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise<T>
 }
 // 混合类型的接口 既包含Axios接口里的方法 又包含自己的方法
 export interface AxiosInstance extends Axios {
-  (config: AxiosRequestConfig): AxiosResponsePromise
-  (url: string, config?: AxiosRequestConfig): AxiosResponsePromise
+  <T = any>(config: AxiosRequestConfig): AxiosResponsePromise<T>
+  <T = any>(url: string, config?: AxiosRequestConfig): AxiosResponsePromise<T>
 }

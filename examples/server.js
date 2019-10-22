@@ -134,4 +134,14 @@ function registerExtendRouter(){
       msg:"extend/patch"
     })
   });
+  router.get('/extend/fanxing',(req,res)=>{
+    res.json({
+      code:0,
+      message:'ok',
+      result:{
+        name:'jack',
+        age:18
+      }
+    })
+  });
 }
