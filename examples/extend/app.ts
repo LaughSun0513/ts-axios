@@ -28,3 +28,21 @@ axios.post('/extend/post', { msg: 'post' })
 axios.put('/extend/put', { msg: 'put' })
 
 axios.patch('/extend/patch', { msg: 'patch' })
+
+// 函数重载的使用
+// 使用一个参数
+axios({
+  url:"/extend/post",
+  method:"post",
+  data:{
+    msg:"have one config"
+  }
+})
+
+// 使用两个参数
+axios("/extend/post",{
+  method:"post",
+  data:{
+    msg:"have two config"
+  }
+})
