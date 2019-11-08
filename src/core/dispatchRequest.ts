@@ -38,10 +38,9 @@ function transformDataToJson(res: any): any {
   }
   return res
 }
-function dispatchRequest(config: AxiosRequestConfig): AxiosResponsePromise {
+async function dispatchRequest(config: AxiosRequestConfig) {
   processConfig(config)
-  return xhr(config).then(res => {
-    return (res = transformDataToJson(res))
-  })
+  const res = await xhr(config)
+  return transformDataToJson(res)
 }
 export default dispatchRequest

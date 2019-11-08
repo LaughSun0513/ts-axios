@@ -7,14 +7,14 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
     const { data = null, url, method = 'get', headers, responseType, timeout } = config
     const ajax = new XMLHttpRequest()
     ajax.open(method.toUpperCase(), url!, true)
-    // 检测是否发送请求头
-    if (data !== null && headers) {
-      Object.keys(headers).forEach(name => {
-        if (name.toLowerCase() === 'content-type') {
-          ajax.setRequestHeader(name, headers[name])
-        }
-      })
-    }
+    // 检测是否发送请求头 如果是content-type就算了，其他的可以带过去
+    Object.keys(headers).forEach(name => {
+      if (data === null && name.toLowerCase() === 'content-type') {
+        delete headers[name]
+      } else {
+        ajax.setRequestHeader(name, headers[name])
+      }
+    })
     // responseType和返回的值 response|responseText 有关系
     // responseText只是返回结果中的一种，就是字符串的形式
     if (responseType) {
@@ -66,16 +66,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
     ajax.ontimeout = () => {
       reject(createError(`Timeout of ${config.timeout} ms exceeded`, config, 'ECONNABORTED', ajax))
     }
-    // 官方写法 检测是否发送请求头
-    /*
-    Object.keys(headers).forEach((name) => {
-      if (data === null && name.toLowerCase() === 'content-type') {
-        delete headers[name]
-      } else {
-        ajax.setRequestHeader(name, headers[name])
-      }
-    })
-    */
+
     ajax.send(data)
   })
 }

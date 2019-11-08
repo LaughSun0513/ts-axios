@@ -71,9 +71,28 @@ export interface Axios {
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise<T>
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise<T>
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+  interceptors: {
+    // 拦截器要控制的数据结构
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
 }
 // 混合类型的接口 既包含Axios接口里的方法 又包含自己的方法
 export interface AxiosInstance extends Axios {
   <T = any>(config: AxiosRequestConfig): AxiosResponsePromise<T>
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosResponsePromise<T>
+}
+// 拦截器接口 -- 场景:可以在发送请求前 加工config(比如加点参数) 响应回来前可以添加点啥
+// config --> config2 --> config3 ---> send ajax --> res1 ---> res2 ---> 最终的res
+// axios.interceptors.request.use(resolved,rejected) || axios.interceptors.request.eject(id)
+// axios.interceptors.response.use(resolved,rejected) || axios.interceptors.response.eject(id)
+export interface AxiosInterceptorManager<T> {
+  use(resolved: ResolveFn<T>, rejected?: RejectFn): number
+  eject(id: number): void
+}
+export interface ResolveFn<T> {
+  (val: T): T | Promise<T> // use的resolve函数返回范型函数 | 或者Promise
+}
+export interface RejectFn {
+  (error: any): any
 }
