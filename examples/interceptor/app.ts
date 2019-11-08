@@ -1,5 +1,5 @@
 import axios from '../../src/index'
-
+// 发送请求前 会在headers里面添加 123   test123 --> 发送请求 ---> 在对结果添加13 --> 拿到的结果res13
 axios.interceptors.request.use(config => {
   config.headers.test += '1'
   return config
