@@ -8,6 +8,7 @@ import {
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import MyInterceptors from './interceptors'
+import mergeConfig from './mergeConfig'
 interface Interceptors {
   request: MyInterceptors<AxiosRequestConfig>
   response: MyInterceptors<AxiosResponse>
@@ -17,8 +18,10 @@ interface PromiseChain<T> {
   rejected?: RejectFn
 }
 export default class Axios {
+  defaults: AxiosRequestConfig
   interceptors: Interceptors
-  constructor() {
+  constructor(initConfig: AxiosRequestConfig) {
+    this.defaults = initConfig
     // 拦截器的最终实现就是 MyInterceptors类的实例对象
     this.interceptors = {
       request: new MyInterceptors<AxiosRequestConfig>(),
@@ -36,6 +39,8 @@ export default class Axios {
     } else {
       config = url
     }
+    // 合并默认配置和自定义传过来的配置
+    config = mergeConfig(this.defaults, config)
     // 实现拦截器的链式调用
     const chain: PromiseChain<any>[] = [
       {
