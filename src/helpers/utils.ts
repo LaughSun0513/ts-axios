@@ -14,3 +14,24 @@ export function extend<T, U>(to: T, from: U): T & U {
   }
   return to as T & U
 }
+export function deepClone(...objs: any[]): any {
+  const newObj = Object.create(null)
+  objs.forEach(obj => {
+    if (obj) {
+      Object.keys(obj).forEach(key => {
+        const val = obj[key]
+        if (isObject(val)) {
+          if (isObject(newObj[key])) {
+            // 为了防止key重复，所以加这一层判断
+            newObj[key] = deepClone(newObj[key], val)
+          } else {
+            newObj[key] = deepClone({}, val)
+          }
+        } else {
+          newObj[key] = val
+        }
+      })
+    }
+  })
+  return newObj
+}

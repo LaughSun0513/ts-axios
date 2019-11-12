@@ -126,6 +126,8 @@
     "webpack-hot-middleware": "^2.25.0"
   },
   "dependencies": {
-    "nodemon": "^1.19.4"
+    "@types/qs": "^6.9.0",
+    "nodemon": "^1.19.4",
+    "qs": "^6.9.1"
   }
 }

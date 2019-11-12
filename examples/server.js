@@ -47,13 +47,15 @@ const registerBaseRouter = require('./serverRoutes/base');
 const registerErrorRouter = require('./serverRoutes/error');
 const registerExtendRouter = require('./serverRoutes/extend');
 const interceptorRouter = require('./serverRoutes/interceptor');
+const registerConfigHeaderRouter = require('./serverRoutes/config');
 
 app.use(
   registerSimpleRouter,
   registerBaseRouter,
   registerErrorRouter,
   registerExtendRouter,
-  interceptorRouter
+  interceptorRouter,
+  registerConfigHeaderRouter
 );
 const PORT = process.env.PORT || 8202;
 

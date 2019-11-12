@@ -78,6 +78,7 @@ export interface Axios {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>
   }
+  defaults: AxiosRequestConfig
 }
 // 混合类型的接口 既包含Axios接口里的方法 又包含自己的方法
 export interface AxiosInstance extends Axios {

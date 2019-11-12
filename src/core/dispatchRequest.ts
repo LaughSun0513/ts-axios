@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosResponsePromise } from '../types'
 import { buildURL } from '../helpers/url'
 import { isObject } from '../helpers/utils'
-import { processHeaders } from '../helpers/header'
+import { processHeaders, flattenHeader } from '../helpers/header'
 import xhr from './xhr'
 
 // get请求 转换URL
@@ -26,6 +26,7 @@ function processConfig(config: AxiosRequestConfig): void {
   config.url = transformURL(config)
   config.headers = transformHeaders(config)
   config.data = transformRequestData(config)
+  config.headers = flattenHeader(config.headers, config.method!)
 }
 // 把返回值data转换为JSON格式
 function transformDataToJson(res: any): any {

@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from '../types'
+import { isObject, deepClone } from '../helpers/utils'
 
 // 设计模式--策略模式
 const strats = Object.create(null) // 接受key-func的映射关系
@@ -17,6 +18,22 @@ const keyFromVal2List = ['url', 'params', 'data']
 keyFromVal2List.forEach(item => {
   strats[item] = onlyVal2Func
 })
+// 如果值为对象 需要深度拷贝策略
+function deepMergeFunc(val1: any, val2: any): any {
+  if (isObject(val2)) {
+    return deepClone(val1, val2)
+  } else if (val2 !== 'undefined') {
+    return val2
+  } else if (isObject(val1)) {
+    return deepClone(val1)
+  } else if (val1 !== 'undefined') {
+    return val1
+  }
+}
+const keyIsObjectVal = ['headers']
+keyIsObjectVal.forEach(item => {
+  strats[item] = deepMergeFunc
+})
 /**
  * @export
  * @param {AxiosRequestConfig} config1  默认配置
@@ -28,7 +45,7 @@ export default function mergeConfig(
   config2?: AxiosRequestConfig
 ): AxiosRequestConfig {
   if (!config2) {
-    //没传配置，就是默认配置
+    // 没传配置，就是默认配置
     config2 = {}
   }
   const newConfig = Object.create(null)
@@ -37,11 +54,11 @@ export default function mergeConfig(
   }
   for (let key in config1) {
     if (!config2[key]) {
-      accordingKeyToChoseMergeStrat(key) //config2中没有的key
+      accordingKeyToChoseMergeStrat(key) // config2中没有的key
     }
   }
   function accordingKeyToChoseMergeStrat(key: string): void {
-    const startFunc = strats(key) || defaultConfigFunc //返回key对应的策略函数
+    const startFunc = strats[key] || defaultConfigFunc // 返回key对应的策略函数
     newConfig[key] = startFunc(config1[key], config2![key]) // 没有索引签名 需要AxiosRequestConfig添加 config2![key]可能为undefined故此断言
   }
   return newConfig

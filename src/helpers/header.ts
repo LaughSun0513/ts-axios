@@ -1,5 +1,6 @@
 // post 请求需处理header请求头
-import { isObject } from './utils'
+import { isObject, deepClone } from './utils'
+import { Method } from '../types'
 export function processHeaders(headers: any, data: any): any {
   // case1:有headers 有data 有Content-Type 按照当前的传
   // case2:如果没有headers 有data 默认传递 'application/json;charset=utf-8'
@@ -59,4 +60,36 @@ export function parseHeaders(headers: string): any {
     parsed[key] = val // 将key-value 存入对象
   })
   return parsed
+}
+
+/*
+将headers压成一层数据结构
+headers: {
+  common: {
+    Accept: 'application/json, text/plain, *'
+  },
+  post: {
+    'Content-Type':'application/x-www-form-urlencoded'
+  }
+}
+==> 
+headers: {
+  Accept: 'application/json, text/plain, *',
+  'Content-Type':'application/x-www-form-urlencoded'
+}
+*/
+export function flattenHeader(headers: any, method: Method): any {
+  if (!headers) {
+    return headers
+  }
+  headers = deepClone(headers.common || {}, headers[method] || {}, headers) // 将所有headers的配置都拿到
+
+  // 删除对应的headers
+  const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
+
+  methodsToDelete.forEach(method => {
+    delete headers[method]
+  })
+
+  return headers
 }
