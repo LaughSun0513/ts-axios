@@ -39,12 +39,14 @@ export default class Axios {
     } else {
       config = url
     }
+
     // 合并默认配置和自定义传过来的配置
     config = mergeConfig(this.defaults, config)
+
     // 实现拦截器的链式调用
     const chain: PromiseChain<any>[] = [
       {
-        resolved: dispatchRequest,
+        resolved: dispatchRequest, // 这里发送请求
         rejected: undefined
       }
     ]

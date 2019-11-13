@@ -40,6 +40,9 @@ export interface AxiosRequestConfig {
   timeout?: number
 
   [propName: string]: any
+  // 实现请求和响应配置化
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 }
 // ajax返回的数据解构
 export interface AxiosResponse<T = any> {
@@ -98,4 +101,8 @@ export interface ResolveFn<T> {
 }
 export interface RejectFn {
   (error: any): any
+}
+// 实现请求和响应配置化
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }

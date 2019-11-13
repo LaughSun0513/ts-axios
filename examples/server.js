@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const {
   json,
@@ -42,12 +44,22 @@ app.use(urlencoded({
 }));
 
 //路由，响应客户端请求的API http://localhost:8000/simple/get
-const registerSimpleRouter = require('./serverRoutes/simple');
+const paths = path.resolve(__dirname,'./serverRoutes/');
+const routesFiles = fs.readdirSync(paths);
+const routersArr = [];
+routesFiles.forEach(curFile=>{
+  const curRouter = require(`./serverRoutes/${curFile}`);
+  routersArr.push(curRouter);
+})
+
+app.use(...routersArr);
+/*  const registerSimpleRouter = require('./serverRoutes/simple');
 const registerBaseRouter = require('./serverRoutes/base');
 const registerErrorRouter = require('./serverRoutes/error');
 const registerExtendRouter = require('./serverRoutes/extend');
 const interceptorRouter = require('./serverRoutes/interceptor');
 const registerConfigHeaderRouter = require('./serverRoutes/config');
+const registerTransformRouter = require('./serverRoutes/transform');
 
 app.use(
   registerSimpleRouter,
@@ -55,8 +67,9 @@ app.use(
   registerErrorRouter,
   registerExtendRouter,
   interceptorRouter,
-  registerConfigHeaderRouter
-);
+  registerConfigHeaderRouter,
+  registerTransformRouter
+); */ 
 const PORT = process.env.PORT || 8202;
 
 app.listen(PORT, () => {

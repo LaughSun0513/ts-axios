@@ -6,6 +6,9 @@ export function processHeaders(headers: any, data: any): any {
   // case2:如果没有headers 有data 默认传递 'application/json;charset=utf-8'
   // case3:有headers 有data 没有Content-Type 默认传递 'application/json;charset=utf-8'
   let normalizedName = 'Content-Type'
+  if (!headers) {
+    return
+  }
   // case1
   Object.keys(headers).forEach(name => {
     if (name.toUpperCase() === normalizedName.toUpperCase()) {

@@ -13,23 +13,24 @@ function onlyVal2Func(val1: any, val2: any): any {
     return val2
   }
 }
+// 如果值为对象 需要深度拷贝策略
+function deepMergeFunc(val1: any, val2: any): any {
+  if (isObject(val2)) {
+    return deepClone(val1, val2)
+  } else if (typeof val2 !== 'undefined') {
+    return val2
+  } else if (isObject(val1)) {
+    return deepClone(val1)
+  } else if (typeof val1 !== 'undefined') {
+    return val1
+  }
+}
 // 以下key只走onlyVal2Func函数
 const keyFromVal2List = ['url', 'params', 'data']
 keyFromVal2List.forEach(item => {
   strats[item] = onlyVal2Func
 })
-// 如果值为对象 需要深度拷贝策略
-function deepMergeFunc(val1: any, val2: any): any {
-  if (isObject(val2)) {
-    return deepClone(val1, val2)
-  } else if (val2 !== 'undefined') {
-    return val2
-  } else if (isObject(val1)) {
-    return deepClone(val1)
-  } else if (val1 !== 'undefined') {
-    return val1
-  }
-}
+
 const keyIsObjectVal = ['headers']
 keyIsObjectVal.forEach(item => {
   strats[item] = deepMergeFunc
