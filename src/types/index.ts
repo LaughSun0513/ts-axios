@@ -106,3 +106,7 @@ export interface RejectFn {
 export interface AxiosTransformer {
   (data: any, headers?: any): any
 }
+// 添加axios.create扩展接口
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+}

@@ -1,10 +1,12 @@
 import axios, { AxiosTransformer } from '../../src/index';
 import qs from 'qs';
-
+// 可以通过transformRequest属性，添加函数，来修改请求前的配置--可以修改headers，data
+// 可以通过transformResponse属性，添加函数，来修改请求回来之后的数据，在返回的数据里面加个属性之类的
 axios({
   transformRequest: [(function (data) {
     return qs.stringify(data)
-  }), ...(axios.defaults.transformRequest as AxiosTransformer[])],
+  }), 
+  ...(axios.defaults.transformRequest as AxiosTransformer[])],
   transformResponse: [
     ...(axios.defaults.transformResponse as AxiosTransformer[]),
     function (data) {
