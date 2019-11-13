@@ -38,11 +38,11 @@ export interface AxiosRequestConfig {
   headers?: any // 请求头
   responseType?: XMLHttpRequestResponseType // 可以指定返回时响应的数据类型 ==> "" | "arraybuffer" | "blob" | "document" | "json" | "text"
   timeout?: number
-
-  [propName: string]: any
   // 实现请求和响应配置化
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+
+  [propName: string]: any
 }
 // ajax返回的数据解构
 export interface AxiosResponse<T = any> {
