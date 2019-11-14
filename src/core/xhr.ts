@@ -4,7 +4,7 @@ import { createError } from '../helpers/error'
 
 export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType, timeout } = config
+    const { data = null, url, method = 'get', headers, responseType, timeout, cancelToken } = config
     const ajax = new XMLHttpRequest()
     ajax.open(method.toUpperCase(), url!, true)
     // 检测是否发送请求头 如果是content-type就算了，其他的可以带过去
@@ -66,7 +66,13 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
     ajax.ontimeout = () => {
       reject(createError(`Timeout of ${config.timeout} ms exceeded`, config, 'ECONNABORTED', ajax))
     }
-
-    ajax.send(data)
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        ajax.abort()
+        reject(reason)
+      })
+    } else {
+      ajax.send(data)
+    }
   })
 }

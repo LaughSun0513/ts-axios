@@ -41,6 +41,7 @@ export interface AxiosRequestConfig {
   // 实现请求和响应配置化
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+  cancelToken?: CancelToken
 
   [propName: string]: any
 }
@@ -109,4 +110,43 @@ export interface AxiosTransformer {
 // 添加axios.create扩展接口
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
+
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
+}
+// axios.CancelToken类的接口定义
+export interface CancelToken {
+  // promise:Promise<string>
+  // reason?:string
+  promise: Promise<Cancel>
+  reason?: Cancel
+
+  throwIfRequested(): void
+}
+// cancel函数的接口定义
+export interface Canceler {
+  (message?: string): void
+}
+// new CancelToken(cancelFunc) cancelFunc返回的cancel函数的接口定义
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+// axios.CancelToken.source().token / axios.CancelToken.source().cancel()
+export interface CancelTokenSource {
+  token: CancelToken // 最终目的：利用promise来控制取消请求的状态
+  cancel: Canceler
+}
+// 实现静态方法
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken // 最终目的：利用promise来控制取消请求的状态 所以source.token和new CancelToken最终的结果一样
+  source(): CancelTokenSource // source函数返回source.token和source.cancel()
+}
+// 实例类型的接口定义
+export interface Cancel {
+  message?: string
+}
+// 类类型的接口定义
+export interface CancelStatic {
+  new (message?: string): Cancel
 }
