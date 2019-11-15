@@ -45,6 +45,12 @@ app.use(urlencoded({
   extended: true
 }));
 app.use(cookieParser());
+// 预防CSRF:每次请求颁发一个token到cookie，下次前端请求携带该token在请求头
+app.use(express.static(__dirname, {
+  setHeaders (res) {
+    res.cookie('XSRF-TOKEN-D', '1234abc')
+  }
+}))
 
 //路由，响应客户端请求的API http://localhost:8000/simple/get
 const paths = path.resolve(__dirname,'./serverRoutes/');

@@ -66,6 +66,7 @@
   ==> /base/get?foo=bar&bar=baz //保留 url 中已存在的参数
 */
 import { isObject, isDate } from './utils'
+import { resolve } from 'dns'
 
 function encode(val: string): string {
   return encodeURIComponent(val)
@@ -170,3 +171,26 @@ export function buildURL(url: string, params?: any) {
 
   return url;
 }*/
+
+// 解析URL是否属于同域
+const urlParsingNode = document.createElement('a')
+const currentOrigin = resolveURL(window.location.href)
+// 解析URL中的 协议 域名 端口
+interface URLOrigin {
+  protocol: string // http or https
+  host: string // 域名+端口
+}
+function resolveURL(url: string): URLOrigin {
+  urlParsingNode.setAttribute('href', url) // 利用a标签来解析当前请求的域
+  const { protocol, host } = urlParsingNode
+  return {
+    protocol,
+    host
+  }
+}
+export function isURLSameOrigin(requestURL: string): boolean {
+  const reqURLOrigin = resolveURL(requestURL)
+  return (
+    reqURLOrigin.protocol === currentOrigin.protocol && reqURLOrigin.host === currentOrigin.host
+  ) // 判断是否同域
+}

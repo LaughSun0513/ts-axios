@@ -1,6 +1,8 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosResponsePromise } from '../types'
 import { parseHeaders } from '../helpers/header'
 import { createError } from '../helpers/error'
+import { isURLSameOrigin } from '../helpers/url'
+import cookie from '../helpers/cookie'
 
 export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
   return new Promise((resolve, reject) => {
@@ -12,7 +14,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
       responseType,
       timeout,
       cancelToken,
-      withCredentials
+      withCredentials,
+      xsrfCookieName,
+      xsrfHeaderName
     } = config
     const ajax = new XMLHttpRequest()
     ajax.open(method.toUpperCase(), url!, true)
@@ -32,6 +36,14 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
     }
     if (withCredentials) {
       ajax.withCredentials = withCredentials
+    }
+    // 如果允许跨域 || 同域 存在xsrfCookieName 就在前端headers带上token的值
+    // 这里允许修改xsrfCookieName和xsrfHeaderName的名字
+    if (withCredentials || (isURLSameOrigin(url!) && xsrfCookieName)) {
+      const xsrfValue = cookie.readXSRFVal(xsrfCookieName!)
+      if (xsrfValue) {
+        headers[xsrfHeaderName!] = xsrfValue
+      }
     }
     ajax.onreadystatechange = () => {
       if (ajax.readyState !== 4 || ajax.status === 0) {
