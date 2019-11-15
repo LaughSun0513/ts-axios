@@ -11,7 +11,9 @@ const webpackConf = require('./webpack.config');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const compiler = webpack(webpackConf);
+const cookieParser = require('cookie-parser');
 
+require('./server2'); // 开启第二个服务
 
 //webpack-dev-server内部实现的核心就是该中间件
 /* 类似以下功能
@@ -42,6 +44,7 @@ app.use(json());
 app.use(urlencoded({
   extended: true
 }));
+app.use(cookieParser());
 
 //路由，响应客户端请求的API http://localhost:8000/simple/get
 const paths = path.resolve(__dirname,'./serverRoutes/');

@@ -81,8 +81,8 @@ export default class Axios {
   requestWithData(
     method: Method,
     url: string,
-    config?: AxiosRequestConfig,
-    data?: any
+    data?: any,
+    config?: AxiosRequestConfig
   ): AxiosResponsePromise {
     const newConfig2 = Object.assign(config || {}, {
       method,
