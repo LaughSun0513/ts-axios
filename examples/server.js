@@ -12,6 +12,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const compiler = webpack(webpackConf);
 const cookieParser = require('cookie-parser');
+const multipart = require('connect-multiparty');
 
 require('./server2'); // 开启第二个服务
 
@@ -47,10 +48,15 @@ app.use(urlencoded({
 app.use(cookieParser());
 // 预防CSRF:每次请求颁发一个token到cookie，下次前端请求携带该token在请求头
 app.use(express.static(__dirname, {
-  setHeaders (res) {
+  setHeaders(res) {
     res.cookie('XSRF-TOKEN-D', '1234abc')
   }
-}))
+}));
+// 上传文件到upload-file文件夹下
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
+}));
+
 
 //路由，响应客户端请求的API http://localhost:8000/simple/get
 const paths = path.resolve(__dirname,'./serverRoutes/');
@@ -62,6 +68,7 @@ routesFiles.forEach(curFile=>{
 })
 
 app.use(...routersArr);
+
 /*  const registerSimpleRouter = require('./serverRoutes/simple');
 const registerBaseRouter = require('./serverRoutes/base');
 const registerErrorRouter = require('./serverRoutes/error');

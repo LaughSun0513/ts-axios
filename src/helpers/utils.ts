@@ -35,3 +35,6 @@ export function deepClone(...objs: any[]): any {
   })
   return newObj
 }
+export function isFormData(val: any): boolean {
+  return typeof val !== 'undefined' && val instanceof FormData
+}
