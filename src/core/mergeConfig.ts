@@ -31,7 +31,7 @@ keyFromVal2List.forEach(item => {
   strats[item] = onlyVal2Func
 })
 
-const keyIsObjectVal = ['headers']
+const keyIsObjectVal = ['headers', 'auth']
 keyIsObjectVal.forEach(item => {
   strats[item] = deepMergeFunc
 })

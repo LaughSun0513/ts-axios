@@ -50,6 +50,8 @@ export interface AxiosRequestConfig {
   onDownloadProgress?: (e: ProgressEvent) => void
   onUploadProgress?: (e: ProgressEvent) => void
 
+  auth?: AxiosBasicCredentials
+
   [propName: string]: any
 }
 // ajax返回的数据解构
@@ -156,4 +158,8 @@ export interface Cancel {
 // 类类型的接口定义
 export interface CancelStatic {
   new (message?: string): Cancel
+}
+export interface AxiosBasicCredentials {
+  username: string
+  password: string
 }

@@ -19,7 +19,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
       xsrfCookieName,
       xsrfHeaderName,
       onDownloadProgress,
-      onUploadProgress
+      onUploadProgress,
+      auth
     } = config
     // 1.创建一个 request 实例
     const ajax = new XMLHttpRequest()
@@ -95,6 +96,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
     function processHeaders(): void {
       if (isFormData(data)) {
         delete headers['Content-Type']
+      }
+      if (auth) {
+        headers['Authorization'] = 'Basic ' + btoa(auth.username + ':' + auth.password)
       }
       // 如果允许跨域 || 同域 存在xsrfCookieName 就在前端headers带上token的值
       // 这里允许修改xsrfCookieName和xsrfHeaderName的名字
