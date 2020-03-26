@@ -52,6 +52,8 @@ export interface AxiosRequestConfig {
 
   auth?: AxiosBasicCredentials
 
+  validateStatus?: (status: number) => boolean
+
   [propName: string]: any
 }
 // ajax返回的数据解构

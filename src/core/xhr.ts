@@ -20,7 +20,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
       xsrfHeaderName,
       onDownloadProgress,
       onUploadProgress,
-      auth
+      auth,
+      validateStatus
     } = config
     // 1.创建一个 request 实例
     const ajax = new XMLHttpRequest()
@@ -128,7 +129,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosResponsePromise {
     }
 
     function handleResponse(result: AxiosResponse): void {
-      if (ajax.status >= 200 && ajax.status < 300) {
+      // 如果没有配置 validateStatus 以及 validateStatus 函数返回的值为 true 的时候，都认为是合法的
+      if (!validateStatus || validateStatus(ajax.status)) {
         resolve(result)
       } else {
         reject(
