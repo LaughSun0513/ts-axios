@@ -7,8 +7,8 @@ import transform from './transform'
 
 // get请求 转换URL
 function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url!, params) // 因为url为可选参数 所以会报错 这里加！表示url为非空
+  const { url, params, paramsSerializer } = config
+  return buildURL(url!, params, paramsSerializer) // 因为url为可选参数 所以会报错 这里加！表示url为非空
 }
 // post请求 添加请求头
 /* function transformHeaders(config: AxiosRequestConfig): any {
