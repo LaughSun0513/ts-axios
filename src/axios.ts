@@ -21,4 +21,13 @@ axios.create = function create(config) {
 axios.CancelToken = CancelToken
 axios.Cancel = Cancel
 axios.isCancel = isCancel
+axios.all = function(promsies) {
+  return Promise.all(promsies)
+}
+axios.spread = function(callback) {
+  return function warp(arr) {
+    return callback.apply(null, arr)
+  }
+}
+axios.Axios = Axios
 export default axios

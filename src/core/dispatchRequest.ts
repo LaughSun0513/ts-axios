@@ -6,7 +6,7 @@ import xhr from './xhr'
 import transform from './transform'
 
 // get请求 转换URL
-function transformURL(config: AxiosRequestConfig): string {
+export function transformURL(config: AxiosRequestConfig): string {
   let { url, params, paramsSerializer, baseURL } = config
   if (baseURL && !isAbsoluteURL(url!)) {
     url = combineURL(baseURL, url)

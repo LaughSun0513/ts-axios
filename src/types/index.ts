@@ -97,6 +97,8 @@ export interface Axios {
     response: AxiosInterceptorManager<AxiosResponse>
   }
   defaults: AxiosRequestConfig
+
+  getUri(config?: AxiosRequestConfig): string
 }
 // 混合类型的接口 既包含Axios接口里的方法 又包含自己的方法
 export interface AxiosInstance extends Axios {
@@ -121,6 +123,9 @@ export interface RejectFn {
 export interface AxiosTransformer {
   (data: any, headers?: any): any
 }
+export interface AxiosClassStatic {
+  new (config: AxiosRequestConfig): Axios
+}
 // 添加axios.create扩展接口
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
@@ -128,6 +133,10 @@ export interface AxiosStatic extends AxiosInstance {
   CancelToken: CancelTokenStatic
   Cancel: CancelStatic
   isCancel: (value: any) => boolean
+
+  all<T>(promsies: Array<T | Promise<T>>): Promise<T[]>
+  spread<T, R>(callback: (...args: T[]) => R): (arr: T[]) => R
+  Axios: AxiosClassStatic
 }
 // axios.CancelToken类的接口定义
 export interface CancelToken {
