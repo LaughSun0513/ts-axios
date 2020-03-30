@@ -55,6 +55,8 @@ export interface AxiosRequestConfig {
   validateStatus?: (status: number) => boolean // 自定义请求状态码
   paramsSerializer?: (params: any) => string // 自定义参数序列化
 
+  baseURL?: string
+
   [propName: string]: any
 }
 // ajax返回的数据解构

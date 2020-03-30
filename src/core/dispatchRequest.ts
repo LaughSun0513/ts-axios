@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosResponsePromise } from '../types'
-import { buildURL } from '../helpers/url'
+import { buildURL, isAbsoluteURL, combineURL } from '../helpers/url'
 import { isObject } from '../helpers/utils'
 import { processHeaders, flattenHeader } from '../helpers/header'
 import xhr from './xhr'
@@ -7,7 +7,10 @@ import transform from './transform'
 
 // get请求 转换URL
 function transformURL(config: AxiosRequestConfig): string {
-  const { url, params, paramsSerializer } = config
+  let { url, params, paramsSerializer, baseURL } = config
+  if (baseURL && !isAbsoluteURL(url!)) {
+    url = combineURL(baseURL, url)
+  }
   return buildURL(url!, params, paramsSerializer) // 因为url为可选参数 所以会报错 这里加！表示url为非空
 }
 // post请求 添加请求头

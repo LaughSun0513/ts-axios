@@ -202,3 +202,9 @@ export function isURLSameOrigin(requestURL: string): boolean {
     reqURLOrigin.protocol === currentOrigin.protocol && reqURLOrigin.host === currentOrigin.host
   ) // 判断是否同域
 }
+export function isAbsoluteURL(url: string): boolean {
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+}
+export function combineURL(baseURL: string, relativeURL?: string): string {
+  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
+}
